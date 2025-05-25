@@ -54,4 +54,19 @@ publicRouter.get('/', async (req, res) => {
   }
 });
 
+// GET /api/v1/public/:platform - Get all public templates by platform
+publicRouter.get('/:platform', async (req, res) => {
+  try {
+    const publics = await Public.find({ platform: req.params.platform });
+
+    res.status(200).json({
+      message: `${publics.length} public templates fetched by platform successfully`,
+      data: publics,
+    });
+  } catch (error) {
+    console.error('Error in GET /public/:platform :', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 export default publicRouter;
