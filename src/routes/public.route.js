@@ -7,12 +7,12 @@ const publicRouter = Router();
 // POST /api/v1/public - Create a new public template
 publicRouter.post('/', async (req, res) => {
   try {
-    const { name, url, platform, description } = req.body;
+    const { name, url, category, description } = req.body;
 
     const validationResult = validatePublic({
       name,
       url,
-      platform,
+      category,
       description,
     });
     if (validationResult) {
@@ -26,7 +26,7 @@ publicRouter.post('/', async (req, res) => {
       return res.status(409).json({ message: 'Name or URL already exists' });
     }
 
-    const newPublic = new Public({ name, url, platform, description });
+    const newPublic = new Public({ name, url, category, description });
     await newPublic.save();
 
     return res.status(201).json({
@@ -39,30 +39,12 @@ publicRouter.post('/', async (req, res) => {
   }
 });
 
-// GET /api/v1/public - Get all public templates
-publicRouter.get('/', async (req, res) => {
-  try {
-    const publics = await Public.find();
-
-    res.status(200).json({
-      message: `${publics.length} public templates fetched successfully`,
-      data: publics,
-    });
-  } catch (error) {
-    console.error('Error in GET /public:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
 // GET /api/v1/public/:platform - Get all public templates by platform
-publicRouter.get('/:platform', async (req, res) => {
+publicRouter.get('/:category', async (req, res) => {
   try {
-    const publics = await Public.find({ platform: req.params.platform });
+    const publics = await Public.find({ category: req.params.category });
 
-    res.status(200).json({
-      message: `${publics.length} public templates fetched by platform successfully`,
-      data: publics,
-    });
+    res.status(200).json(publics);
   } catch (error) {
     console.error('Error in GET /public/:platform :', error);
     res.status(500).json({ message: 'Internal server error' });

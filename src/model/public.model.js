@@ -9,13 +9,13 @@ const publicSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  platform: {
+  category: {
     type: String,
     required: true,
   },
   description: {
     type: String,
-    required: true,
+    required: false,
     default: '',
   },
 });

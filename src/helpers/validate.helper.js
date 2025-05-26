@@ -1,17 +1,20 @@
 import User from '../model/users.model.js';
 
-const PlatformEnum = {
-  WEB: 'web',
-  ANDROID: 'android',
-  IOS: 'ios',
-  WINDOWS: 'windows',
-  MAC: 'mac',
-  LINUX: 'linux',
-  OTHER: 'other',
+const CategoryEnum = {
+  React: 'react',
+  Vue: 'vue',
+  Angular: 'angular',
+  NextJs: 'next',
+  Express: 'express',
+  NestJS: 'nest',
+  ReactNative: 'react-native',
+  Flutter: 'flutter',
+  VanillaJS: 'vanilla',
 };
 
-export const validatePublic = ({ name, url, platform, description }) => {
-  if (!name || !url || !platform || !description) {
+export const validatePublic = ({ name, url, category, description }) => {
+  // console.log({ name, url, category, description });
+  if (!name || !url || !category) {
     return {
       status: 400,
       message: 'All fields are required',
@@ -21,7 +24,7 @@ export const validatePublic = ({ name, url, platform, description }) => {
   if (
     typeof name !== 'string' ||
     typeof url !== 'string' ||
-    typeof platform !== 'string' ||
+    typeof category !== 'string' ||
     typeof description !== 'string'
   ) {
     return {
@@ -30,10 +33,10 @@ export const validatePublic = ({ name, url, platform, description }) => {
     };
   }
 
-  if (!Object.values(PlatformEnum).includes(platform)) {
+  if (!Object.values(CategoryEnum).includes(category)) {
     return {
       status: 400,
-      message: 'Invalid platform value',
+      message: 'Invalid category value',
     };
   }
 
