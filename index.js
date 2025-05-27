@@ -5,6 +5,7 @@ import publicRouter from './src/routes/public.route.js';
 import privateRouter from './src/routes/private.route.js';
 import connectDB from './src/database/db.js';
 import authRouter from './src/routes/auth.route.js';
+import authMiddleware from './src/middleware/auth.middleware.js';
 dotenv.config();
 
 const app = express();
@@ -24,7 +25,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/public', publicRouter);
-app.use('/api/v1/private', privateRouter);
+app.use('/api/v1/private', authMiddleware, privateRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

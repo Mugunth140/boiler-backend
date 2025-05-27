@@ -1,3 +1,4 @@
+import Private from '../model/private.model.js';
 import User from '../model/users.model.js';
 
 const CategoryEnum = {
@@ -43,8 +44,8 @@ export const validatePublic = ({ name, url, category, description }) => {
   return null;
 };
 
-export const validatePrivate = ({ username, password, repository }) => {
-  if (!username || !password || !repository) {
+export const validatePrivate = async ({ user, name, url }) => {
+  if (!user || !name || !url) {
     return {
       status: 400,
       message: 'All fields are required',
@@ -52,13 +53,20 @@ export const validatePrivate = ({ username, password, repository }) => {
   }
 
   if (
-    typeof username !== 'string' ||
-    typeof password !== 'string' ||
-    typeof repository !== 'object'
+    typeof user !== 'string' ||
+    typeof name !== 'string' ||
+    typeof url !== 'string'
   ) {
     return {
       status: 400,
       message: 'Invalid data type',
+    };
+  }
+  const userExists = await Private.findById(user);
+  if (!userExists) {
+    return {
+      status: 404,
+      message: `User with ID ${user} not found`,
     };
   }
 
