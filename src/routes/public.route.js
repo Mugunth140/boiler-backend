@@ -51,4 +51,14 @@ publicRouter.get('/:category', async (req, res) => {
   }
 });
 
+publicRouter.get('/', async (req, res) => {
+  try {
+    const publics = await Public.find();
+    res.status(200).json(publics);
+  } catch (error) {
+    console.error('Error in GET /public/:platform :', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 export default publicRouter;

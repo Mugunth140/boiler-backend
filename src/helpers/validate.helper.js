@@ -95,13 +95,13 @@ export const validateUser = async ({ username, password }) => {
     };
   }
 
-  const userExists = await User.findOne({ username });
-  if (userExists) {
-    return {
-      status: 409,
-      message: 'Username is already taken',
-    };
-  }
+  // const userExists = await User.findOne({ username });
+  // if (userExists) {
+  //   return {
+  //     status: 409,
+  //     message: 'Username is already taken',
+  //   };
+  // }
 
   return null;
 };
