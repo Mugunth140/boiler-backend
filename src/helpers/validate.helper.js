@@ -1,4 +1,3 @@
-import Private from '../model/private.model.js';
 import User from '../model/users.model.js';
 
 const CategoryEnum = {
@@ -62,7 +61,16 @@ export const validatePrivate = async ({ user, name, url }) => {
       message: 'Invalid data type',
     };
   }
-  const userExists = await Private.findById(user);
+
+  const githubUrlPattern = /^https:\/\/github\.com\/[\w-]+\/[\w-]+(\.git)?$/;
+  if (!githubUrlPattern.test(url)) {
+    return {
+      status: 400,
+      message: 'Invalid GitHub repository URL',
+    };
+  }
+
+  const userExists = await User.findById(user);
   if (!userExists) {
     return {
       status: 404,
@@ -72,7 +80,6 @@ export const validatePrivate = async ({ user, name, url }) => {
 
   return null;
 };
-
 export const validateUser = async ({ username, password }) => {
   if (!username || !password) {
     return {
@@ -95,13 +102,13 @@ export const validateUser = async ({ username, password }) => {
     };
   }
 
-  // const userExists = await User.findOne({ username });
-  // if (userExists) {
-  //   return {
-  //     status: 409,
-  //     message: 'Username is already taken',
-  //   };
-  // }
+  const userExists = await User.findOne({ username });
+  if (userExists) {
+    return {
+      status: 409,
+      message: 'Username is already taken',
+    };
+  }
 
   return null;
 };

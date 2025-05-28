@@ -39,18 +39,6 @@ publicRouter.post('/', async (req, res) => {
   }
 });
 
-// GET /api/v1/public/:platform - Get all public templates by platform
-publicRouter.get('/:category', async (req, res) => {
-  try {
-    const publics = await Public.find({ category: req.params.category });
-
-    res.status(200).json(publics);
-  } catch (error) {
-    console.error('Error in GET /public/:platform :', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
 publicRouter.get('/', async (req, res) => {
   try {
     const publics = await Public.find();

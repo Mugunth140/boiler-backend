@@ -40,54 +40,11 @@ authRouter.post('/login', async (req, res) => {
       message: 'Invalid password',
     });
   }
-  const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, {
-    expiresIn: '3h',
-  });
+  const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET);
   return res.status(200).json({
+    id: user._id,
     token,
   });
-});
-
-authRouter.post('/login-register', async (req, res) => {
-  const { username, password } = req.body;
-  const validateResult = validateUser({ username, password });
-  if (validateResult) {
-    return res.status(validateResult.status).json({
-      message: validateResult.message,
-    });
-  }
-  const userExists = await User.findOne({ username });
-  if (userExists) {
-    const token = jwt.sign(
-      { username: userExists.username },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '1d',
-      },
-    );
-    return res.status(200).json({
-      token,
-    });
-  } else {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      repository: [],
-    });
-    await newUser.save();
-    const token = jwt.sign(
-      { username: newUser.username },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '1d',
-      },
-    );
-
-    return res.status(200).json({
-      token,
-    });
-  }
 });
 
 export default authRouter;
