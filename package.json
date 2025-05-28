@@ -9,7 +9,7 @@
     "dev": "nodemon index.js",
     "start": "node .index.js",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "build": "npm install"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
